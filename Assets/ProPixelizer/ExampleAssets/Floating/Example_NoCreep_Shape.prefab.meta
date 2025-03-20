@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3039c4e7fc79eb2479e964f755ef2d5d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ExampleAssets/Floating/Example_NoCreep_Shape.prefab
+  uploadId: 701385

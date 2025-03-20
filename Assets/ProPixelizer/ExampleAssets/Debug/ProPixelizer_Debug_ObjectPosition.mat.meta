@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: dda3a7b38929f3c468cd70f55c41bece
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ExampleAssets/Debug/ProPixelizer_Debug_ObjectPosition.mat
+  uploadId: 701385

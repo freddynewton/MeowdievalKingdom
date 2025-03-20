@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 218fec54e28fcca42abd36f468ac506a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/Palettes/DitherPatterns/ordered4x4.asset
+  uploadId: 701385

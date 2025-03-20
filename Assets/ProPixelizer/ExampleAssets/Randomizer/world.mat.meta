@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 67ee5c939336262498f64a7f15c416e8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ExampleAssets/Randomizer/world.mat
+  uploadId: 701385

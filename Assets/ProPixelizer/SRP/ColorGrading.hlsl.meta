@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 70943f3e80f3d684c8bb849f9f026c2f
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/SRP/ColorGrading.hlsl
+  uploadId: 701385

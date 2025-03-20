@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 810b5cea74d6b7c4db4daa24e809d945
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ExampleAssets/Floating/Example_NoCreep.unity
+  uploadId: 701385

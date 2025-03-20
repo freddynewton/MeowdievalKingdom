@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 9597c339a2111384f92dc052985805b7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/SRP/PixelizedWithOutlineShaderGUI.cs
+  uploadId: 701385

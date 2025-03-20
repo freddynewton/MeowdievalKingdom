@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c8260a675dacd814d9d4cc81f84e431c
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ExampleAssets/PixelAlignment/PixelAlignment.unity
+  uploadId: 701385

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c59878161c7e0ad40b0661b47620d0e5
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/SRP/OutlineDetection.shader
+  uploadId: 701385

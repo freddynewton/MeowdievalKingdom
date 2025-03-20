@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 3c0f2c94107202c4eb44b8ede3b1546e
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/SRP/OutlinePass.hlsl
+  uploadId: 701385

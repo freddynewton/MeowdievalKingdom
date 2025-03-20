@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 19bfc7f673f5a4b43851d96f52123ffe
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ExampleAssets/Floating/Example_NoCreep_Floor.mat
+  uploadId: 701385

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b0a949ffe379d9a4380fada4751da922
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ExampleAssets/Alpha/AlphaCutoffExample.mat
+  uploadId: 701385

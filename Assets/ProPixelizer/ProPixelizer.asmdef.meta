@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 64986938c4067044ab20cd0ee9d9d436
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ProPixelizer.asmdef
+  uploadId: 701385

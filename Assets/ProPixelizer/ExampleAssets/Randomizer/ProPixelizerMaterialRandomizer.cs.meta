@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 634ec4e8a67b88d46aa2d79ba7861d9b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/ExampleAssets/Randomizer/ProPixelizerMaterialRandomizer.cs
+  uploadId: 701385

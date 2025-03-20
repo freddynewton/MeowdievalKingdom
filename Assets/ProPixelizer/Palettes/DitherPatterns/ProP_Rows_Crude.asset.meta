@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e0e4c44b183312e4da982a65bfbb791a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 177877
+  packageName: ProPixelizer - Realtime 3D Pixel Art
+  packageVersion: 1.8.2
+  assetPath: Assets/ProPixelizer/Palettes/DitherPatterns/ProP_Rows_Crude.asset
+  uploadId: 701385
