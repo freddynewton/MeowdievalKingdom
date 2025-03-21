@@ -8,7 +8,7 @@ namespace Meowdieval.Core.Utils
     /// </summary>
     public class WindowEnvironmentDragger : MonoBehaviour
     {
-        [SerializeField] private Rigidbody _gameLevel;
+        [SerializeField] private Transform _gameLevel;
         [SerializeField] private RectTransform _gameLevelUi;
         [SerializeField] private Button _dragButton;
 
@@ -30,7 +30,7 @@ namespace Meowdieval.Core.Utils
         private void Update()
         {
             // Start dragging when the mouse button is pressed and the drag button is selected
-            if (Input.GetMouseButtonDown(0) )
+            if (Input.GetMouseButtonDown(0))
             {
                 StartDragging();
             }
@@ -88,11 +88,11 @@ namespace Meowdieval.Core.Utils
                 Vector3 targetPosition = new Vector3(offset.x, _gameLevel.position.y, offset.z);
 
                 // Smoothly move the object to the target position with a bit of overshoot
-                _gameLevel.MovePosition(Vector3.SmoothDamp(_gameLevel.position, targetPosition, ref _velocity, _smoothTime * Time.deltaTime));
+                _gameLevel.position = Vector3.SmoothDamp(_gameLevel.position, targetPosition, ref _velocity, _smoothTime * Time.deltaTime);
 
                 // Update the UI element position to follow the game object
                 Vector3 screenPosition = _mainCamera.WorldToScreenPoint(_gameLevel.position);
-                _gameLevelUi.position = Vector3.SmoothDamp(_gameLevel.position, screenPosition, ref _velocity, _smoothTime * Time.deltaTime);
+                _gameLevelUi.position = screenPosition;
             }
         }
 
