@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Meowdieval.Core.Utils
 {
@@ -8,6 +9,8 @@ namespace Meowdieval.Core.Utils
     public class WindowEnvironmentDragger : MonoBehaviour
     {
         [SerializeField] private Rigidbody _gameLevel;
+        [SerializeField] private RectTransform _gameLevelUi;
+        [SerializeField] private Button _dragButton;
 
         [Header("Settings")]
         [SerializeField] private LayerMask worldPlaneLayer;
@@ -16,6 +19,7 @@ namespace Meowdieval.Core.Utils
         private Camera _mainCamera;
         private bool _isDragging = false; // Flag to track the dragging status
         private Vector3 _velocity = Vector3.zero; // Velocity for SmoothDamp
+        private Vector3 _offset;
 
         private void Start()
         {
@@ -25,8 +29,8 @@ namespace Meowdieval.Core.Utils
 
         private void Update()
         {
-            // Start dragging when the mouse button is pressed
-            if (Input.GetMouseButtonDown(0))
+            // Start dragging when the mouse button is pressed and the drag button is selected
+            if (Input.GetMouseButtonDown(0) )
             {
                 StartDragging();
             }
@@ -59,6 +63,8 @@ namespace Meowdieval.Core.Utils
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, worldPlaneLayer))
             {
                 _isDragging = true;
+
+                _offset = _gameLevel.position - hit.point;
             }
         }
 
@@ -76,11 +82,17 @@ namespace Meowdieval.Core.Utils
             // Perform the raycast and check if it hits the "WorldPlane" layer
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, worldPlaneLayer))
             {
+                Vector3 offset = hit.point + _offset;
+
                 // Get the hit point and maintain the current Y position of the object
-                Vector3 targetPosition = new Vector3(hit.point.x, _gameLevel.position.y, hit.point.z);
+                Vector3 targetPosition = new Vector3(offset.x, _gameLevel.position.y, offset.z);
 
                 // Smoothly move the object to the target position with a bit of overshoot
-                _gameLevel.MovePosition(Vector3.SmoothDamp(_gameLevel.position, targetPosition, ref _velocity, _smoothTime));
+                _gameLevel.MovePosition(Vector3.SmoothDamp(_gameLevel.position, targetPosition, ref _velocity, _smoothTime * Time.deltaTime));
+
+                // Update the UI element position to follow the game object
+                Vector3 screenPosition = _mainCamera.WorldToScreenPoint(_gameLevel.position);
+                _gameLevelUi.position = Vector3.SmoothDamp(_gameLevel.position, screenPosition, ref _velocity, _smoothTime * Time.deltaTime);
             }
         }
 
