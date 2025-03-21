@@ -34,6 +34,9 @@ namespace Meowdieval.Core.Utils
         /// </summary>
         private void Start()
         {
+            // Only execute in the built version of the application
+            if (Application.isEditor) return;
+
             // Get the current window handle
             hWnd = GetActiveWindow();
 
@@ -57,6 +60,9 @@ namespace Meowdieval.Core.Utils
         /// </summary>
         private void Update()
         {
+            // Only execute in the built version of the application
+            if (Application.isEditor) return;
+
             bool isOverElement = IsPointerOverElement();
             SetClickthrough(!isOverElement);
 
