@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Meowdieval.Core.Utils
@@ -6,7 +7,7 @@ namespace Meowdieval.Core.Utils
     /// <summary>
     /// This class allows dragging a game object to follow the mouse cursor along the X and Z axes.
     /// </summary>
-    public class WindowEnvironmentDragger : MonoBehaviour
+    public class WindowEnvironmentDragger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private Transform _gameLevel;
         [SerializeField] private RectTransform _gameLevelUi;
@@ -18,6 +19,7 @@ namespace Meowdieval.Core.Utils
 
         private Camera _mainCamera;
         private bool _isDragging = false; // Flag to track the dragging status
+        private bool _isPointerOverButton = false; // Flag to track if the pointer is over the drag button
         private Vector3 _velocity = Vector3.zero; // Velocity for SmoothDamp
         private Vector3 _offset;
 
@@ -29,8 +31,8 @@ namespace Meowdieval.Core.Utils
 
         private void Update()
         {
-            // Start dragging when the mouse button is pressed and the drag button is selected
-            if (Input.GetMouseButtonDown(0))
+            // Start dragging when the mouse button is pressed and the pointer is over the drag button
+            if (Input.GetMouseButtonDown(0) && _isPointerOverButton)
             {
                 StartDragging();
             }
@@ -46,6 +48,24 @@ namespace Meowdieval.Core.Utils
             {
                 StopDragging();
             }
+        }
+
+        /// <summary>
+        /// Called when the pointer enters the drag button.
+        /// </summary>
+        /// <param name="eventData">The event data associated with the pointer enter event.</param>
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            _isPointerOverButton = true;
+        }
+
+        /// <summary>
+        /// Called when the pointer exits the drag button.
+        /// </summary>
+        /// <param name="eventData">The event data associated with the pointer exit event.</param>
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            _isPointerOverButton = false;
         }
 
         /// <summary>

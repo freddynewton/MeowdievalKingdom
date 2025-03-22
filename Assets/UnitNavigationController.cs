@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Meowdieval
+namespace Meowdieval.Core.Ai
 {
     [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
     public class UnitNavigationController : MonoBehaviour
@@ -11,7 +11,7 @@ namespace Meowdieval
         private float _wanderTimer = 5f;
         private float _timer;
         private int _frameCounter = 0;
-        private const int FrameCheckInterval = 20;
+        private int _frameCheckInterval = 20;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -34,7 +34,7 @@ namespace Meowdieval
             }
 
             // Check every 20 frames if the path is still valid
-            if (_frameCounter >= FrameCheckInterval)
+            if (_frameCounter >= _frameCheckInterval)
             {
                 if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance && !_navMeshAgent.hasPath)
                 {
@@ -42,6 +42,8 @@ namespace Meowdieval
                     _navMeshAgent.SetDestination(_targetPosition);
                 }
                 _frameCounter = 0;
+
+                _frameCheckInterval = Random.Range(10, 30);
             }
         }
 
