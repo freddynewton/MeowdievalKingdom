@@ -9,7 +9,6 @@ namespace Meowdieval
 
         [SerializeField] private float _cellSize = 1f;
         [SerializeField] private float _margin = 0.1f;
-        [SerializeField] private float _distanceBetweenCells = 0.1f;
         [SerializeField] private Vector3 _offset = Vector3.zero;
 
         private Vector3[,] _cellPositions;
@@ -20,16 +19,16 @@ namespace Meowdieval
         private Vector3[,] GetCellPositions()
         {
             Bounds bounds = GetEnvironmentBounds();
-            int rows = Mathf.CeilToInt((bounds.max.x - bounds.min.x - 2 * _margin) / (_cellSize + _distanceBetweenCells));
-            int cols = Mathf.CeilToInt((bounds.max.z - bounds.min.z - 2 * _margin) / (_cellSize + _distanceBetweenCells));
+            int rows = Mathf.CeilToInt((bounds.max.x - bounds.min.x - 2 * _margin) / _cellSize);
+            int cols = Mathf.CeilToInt((bounds.max.z - bounds.min.z - 2 * _margin) / _cellSize);
             Vector3[,] cellPositions = new Vector3[rows, cols];
 
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    float x = bounds.min.x + _margin + i * (_cellSize + _distanceBetweenCells) + _offset.x;
-                    float z = bounds.min.z + _margin + j * (_cellSize + _distanceBetweenCells) + _offset.z;
+                    float x = bounds.min.x + _margin + i * _cellSize + _offset.x;
+                    float z = bounds.min.z + _margin + j * _cellSize + _offset.z;
                     Vector3 position = new Vector3(x, bounds.max.y + 1 + _offset.y, z);
                     if (IsPositionValid(position))
                     {
