@@ -59,6 +59,11 @@ namespace Meowdieval
 
         private Bounds GetEnvironmentBounds()
         {
+            if (_environmentRenderer == null)
+            {
+                return new Bounds();
+            }
+
             return _environmentRenderer.bounds;
         }
 
@@ -70,6 +75,8 @@ namespace Meowdieval
 
         private void OnDrawGizmos()
         {
+            return;
+
             _environmentRenderer ??= _environment.GetComponent<Renderer>();
             _cellPositions = GetCellPositions();
 
