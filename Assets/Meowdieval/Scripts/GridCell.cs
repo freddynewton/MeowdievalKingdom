@@ -7,25 +7,31 @@ namespace Meowdieval.Core.GridSystem
 	public class GridCell : MonoBehaviour
 	{
 		[SerializeField] private GridCellSettings _colorSettings;
+
 		public Vector3 Position { get; private set; }
 		public bool IsOccupied { get; private set; }
-		private Vector3 _initialScale;
 
-		private SpriteRenderer _spriteRenderer;
+		private MeshRenderer _meshRenderer;
+		private Material _materialInstance;
+		private Color _currentColor;
 
 		private void Awake()
 		{
-			_spriteRenderer ??= GetComponentInChildren<SpriteRenderer>();
+			_meshRenderer ??= GetComponentInChildren<MeshRenderer>();
+
+			// Create a material instance to avoid modifying the shared material  
+			if (_meshRenderer != null)
+			{
+				_materialInstance = _meshRenderer.material;
+				_currentColor = _materialInstance.color;
+			}
 		}
 
 		public void Initialize(Vector3 position, Vector3 scale, bool isVisible)
 		{
 			Position = position;
 			transform.position = position;
-
-			_initialScale = scale;
 			transform.localScale = scale;
-
 			IsOccupied = false;
 
 			SetVisibility(isVisible, 0f);
@@ -52,28 +58,63 @@ namespace Meowdieval.Core.GridSystem
 
 		public void HighlightCell(float duration = 0.3f)
 		{
-			_spriteRenderer.DOKill();
-
-			_spriteRenderer.DOColor(_colorSettings.HighlightColor, duration);
+			if (_materialInstance != null)
+			{
+				_materialInstance.DOKill();
+				_currentColor = _colorSettings.HighlightColor;
+				_materialInstance.DOColor(_currentColor, duration);
+			}
 		}
 
-		public void SetVisibility(bool visible, float duration = 0.3f)
+		public void SetVisibility(bool visible, Ease ease = Ease.OutBack, float duration = 0.3f)
 		{
-			transform.DOScale(visible ? _initialScale : Vector3.zero, duration);
+			if (_materialInstance == null)
+			{
+				return;
+			}
+
+			if (visible)
+			{
+				gameObject.SetActive(true);
+			}
+
+			_materialInstance.DOKill();
+			transform.DOKill();
+
+			float targetAlpha = visible ? _currentColor.a : 0f;
+
+			_materialInstance.DOFade(targetAlpha, duration).OnComplete(() =>
+			{
+				if (!visible)
+				{
+					gameObject.SetActive(false);
+				}
+			});
+			transform.DOJump(transform.position, 0.5f, 1, duration).SetEase(ease);
 		}
 
 		private void SetDefaultState(float duration = 0.3f)
 		{
-			_spriteRenderer.DOKill();
-
-			_spriteRenderer.DOColor(_colorSettings.DefaultColor, duration);
+			if (_materialInstance != null)
+			{
+				_materialInstance.DOKill();
+				_materialInstance.DOColor(_colorSettings.DefaultColor, duration).OnComplete(() =>
+				{
+					_currentColor = _colorSettings.DefaultColor;
+				});
+			}
 		}
 
 		private void SetOccupiedState(float duration = 0.3f)
 		{
-			_spriteRenderer.DOKill();
-
-			_spriteRenderer.DOColor(_colorSettings.OccupiedColor, duration);
+			if (_materialInstance != null)
+			{
+				_materialInstance.DOKill();
+				_materialInstance.DOColor(_colorSettings.OccupiedColor, duration).OnComplete(() =>
+				{
+					_currentColor = _colorSettings.OccupiedColor;
+				});
+			}
 		}
 	}
 }
