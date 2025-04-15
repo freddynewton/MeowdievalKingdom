@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4aa7798731f2a044ab71b189403a4a8, type: 3}
   m_Name: GridCellColorSettings
   m_EditorClassIdentifier: 
-  DefaultColor: {r: 1, g: 1, b: 1, a: 0.1254902}
-  OccupiedColor: {r: 1, g: 0, b: 0, a: 0.5019608}
-  HighlightColor: {r: 0, g: 1, b: 1, a: 0.5019608}
+  DefaultAlpha: 0.1
+  DefaultColor: {r: 1, g: 1, b: 1, a: 1}
+  OccupiedAlpha: 0.8
+  OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
+  HighlightAlpha: 0.7
+  HighlightColor: {r: 0, g: 1, b: 1, a: 1}
