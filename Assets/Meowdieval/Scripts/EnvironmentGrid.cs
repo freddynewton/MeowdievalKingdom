@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Meowdieval.Core.GridSystem
 {
@@ -19,6 +20,7 @@ namespace Meowdieval.Core.GridSystem
 		[SerializeField] private float _cellDelayAnimation = 0.1f;
 
 		private Renderer _environmentRenderer;
+		private Terrain _environmentTerrain;
 		private GameObject _cellsParent;
 		private bool _isGridVisible = false;
 
@@ -31,20 +33,25 @@ namespace Meowdieval.Core.GridSystem
 		private void Start()
 		{
 			_environmentRenderer ??= _environment.GetComponent<Renderer>();
+			_environmentTerrain ??= _environment.GetComponent<Terrain>();
 			CreateGridCells();
 
 			// Initialize the GridAnimationController
-			_gridAnimationController = new GridCellAnimationController(_gridCells, _cellDelayAnimation);
+			_gridAnimationController = new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
 		}
 
 		private Bounds GetEnvironmentBounds()
 		{
-			if (_environmentRenderer == null)
+			if (_environmentRenderer != null)
 			{
-				return new Bounds();
+				return _environmentRenderer.bounds;
+			}
+			else if (_environmentTerrain != null)
+			{
+				return new Bounds(_environmentTerrain.transform.position + _environmentTerrain.terrainData.size / 2, _environmentTerrain.terrainData.size);
 			}
 
-			return _environmentRenderer.bounds;
+			return new Bounds();
 		}
 
 		private void CreateGridCells()
@@ -64,7 +71,18 @@ namespace Meowdieval.Core.GridSystem
 				{
 					float x = bounds.min.x + _margin + i * _cellSize + _offset.x;
 					float z = bounds.min.z + _margin + j * _cellSize + _offset.z;
-					Vector3 position = new Vector3(x, 0, z);
+					Vector3 position = GetPositionFromSky(new Vector3(x, 0, z) + Vector3.up * 100);
+
+					// Check if the position is with SamplePosition
+					if (!NavMesh.SamplePosition(position, out NavMeshHit hit, _cellSize, NavMesh.AllAreas))
+					{
+						continue;
+					}
+
+					if (position == Vector3.zero)
+					{
+						continue;
+					}
 
 					GridCell cell = Instantiate(_gridCellPrefab, position, Quaternion.identity, _cellsParent.transform);
 					cell.Initialize(position, new Vector3(_cellSize, _cellSize, _cellSize), false);
@@ -74,12 +92,25 @@ namespace Meowdieval.Core.GridSystem
 			}
 		}
 
+		public Vector3 GetPositionFromSky(Vector3 skyPosition)
+		{
+			Ray ray = new Ray(skyPosition, Vector3.down);
+			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _environmentLayerMask))
+			{
+				return hit.point;
+			}
+			return Vector3.zero;
+		}
+
 		public void ShowGrid()
 		{
 			if (_isGridVisible)
 			{
 				return;
 			}
+
+
+			_gridAnimationController ??= new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
 
 			StartCoroutine(_gridAnimationController.ShowGrid());
 			_isGridVisible = true;
@@ -91,6 +122,9 @@ namespace Meowdieval.Core.GridSystem
 			{
 				return;
 			}
+
+
+			_gridAnimationController ??= new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
 
 			StartCoroutine(_gridAnimationController.HideGrid());
 			_isGridVisible = false;
