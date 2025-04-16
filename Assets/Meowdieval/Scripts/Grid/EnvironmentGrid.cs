@@ -73,7 +73,7 @@ namespace Meowdieval.Core.GridSystem
 					float z = bounds.min.z + _margin + j * _cellSize + _offset.z;
 					Vector3 position = GetPositionFromSky(new Vector3(x, 0, z) + Vector3.up * 100);
 
-					// Check if the position is with SamplePosition
+					// Check if the position is within SamplePosition
 					if (!NavMesh.SamplePosition(position, out NavMeshHit hit, _cellSize, NavMesh.AllAreas))
 					{
 						continue;
@@ -109,7 +109,6 @@ namespace Meowdieval.Core.GridSystem
 				return;
 			}
 
-
 			_gridAnimationController ??= new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
 
 			StartCoroutine(_gridAnimationController.ToggleGrid(true));
@@ -122,7 +121,6 @@ namespace Meowdieval.Core.GridSystem
 			{
 				return;
 			}
-
 
 			_gridAnimationController ??= new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
 

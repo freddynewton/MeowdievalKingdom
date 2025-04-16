@@ -21,6 +21,7 @@ namespace Meowdieval.Core.GridSystem
 
 		/// <summary>
 		/// Toggles the visibility of the grid cells starting from the center of the screen (using a raycast) and expanding outward.
+		/// Only grid cells visible on the screen will be toggled.
 		/// </summary>
 		/// <param name="isVisible">True to show the grid, false to hide it.</param>
 		public IEnumerator ToggleGrid(bool isVisible)
@@ -37,7 +38,6 @@ namespace Meowdieval.Core.GridSystem
 				float closestDistance = float.MaxValue;
 				int centerX = 0, centerY = 0;
 
-				// Flatten the loop to improve performance by reducing nested iterations
 				int rows = _gridCells.GetLength(0);
 				int cols = _gridCells.GetLength(1);
 
@@ -65,6 +65,7 @@ namespace Meowdieval.Core.GridSystem
 
 		/// <summary>
 		/// Recursively toggles the visibility of grid cells layer by layer.
+		/// Only grid cells visible on the screen will be toggled.
 		/// </summary>
 		/// <param name="centerX">The X index of the center grid cell.</param>
 		/// <param name="centerY">The Y index of the center grid cell.</param>
@@ -83,8 +84,13 @@ namespace Meowdieval.Core.GridSystem
 
 					if (distanceX + distanceY == layer && _gridCells[i, j] != null)
 					{
-						_gridCells[i, j].SetVisibility(isVisible);
-						hasCellsToToggle = true;
+						// Check if the grid cell is visible on the screen
+						Vector3 viewportPoint = _camera.WorldToViewportPoint(_gridCells[i, j].Position);
+						if (viewportPoint.x >= 0 && viewportPoint.x <= 1 && viewportPoint.y >= 0 && viewportPoint.y <= 1 && viewportPoint.z > 0)
+						{
+							_gridCells[i, j].SetVisibility(isVisible);
+							hasCellsToToggle = true;
+						}
 					}
 				}
 			}
