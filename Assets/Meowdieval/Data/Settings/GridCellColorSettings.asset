@@ -16,5 +16,5 @@ MonoBehaviour:
   DefaultColor: {r: 1, g: 1, b: 1, a: 1}
   OccupiedAlpha: 0.8
   OccupiedColor: {r: 1, g: 0, b: 0, a: 1}
-  HighlightAlpha: 0.7
+  HighlightAlpha: 1
   HighlightColor: {r: 0, g: 1, b: 1, a: 1}

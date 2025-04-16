@@ -1,5 +1,3 @@
-using DG.Tweening;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,6 +17,9 @@ namespace Meowdieval.Core.GridSystem
 		[Header("Animation Settings")]
 		[SerializeField] private float _cellDelayAnimation = 0.1f;
 
+		[Header("Highlight Settings")]
+		[SerializeField] private float _highlightInterval = 1f; // Interval in seconds
+
 		private Renderer _environmentRenderer;
 		private Terrain _environmentTerrain;
 		private GameObject _cellsParent;
@@ -26,6 +27,9 @@ namespace Meowdieval.Core.GridSystem
 
 		private GridCell[,] _gridCells;
 		private GridCellAnimationController _gridAnimationController;
+
+		private GridCell _lastHighlightedCell;
+		private float _nextHighlightTime;
 
 		public GridCell[,] GridCells => _gridCells;
 		public bool IsGridVisible => _isGridVisible;
@@ -38,6 +42,16 @@ namespace Meowdieval.Core.GridSystem
 
 			// Initialize the GridAnimationController
 			_gridAnimationController = new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
+		}
+
+		private void Update()
+		{
+			// Check if it's time to highlight the closest cell
+			if (Time.deltaTime >= _nextHighlightTime)
+			{
+				HighlightCellClosestToMouse();
+				_nextHighlightTime = Time.deltaTime + _highlightInterval; // Schedule the next highlight
+			}
 		}
 
 		private Bounds GetEnvironmentBounds()
@@ -126,6 +140,51 @@ namespace Meowdieval.Core.GridSystem
 
 			StartCoroutine(_gridAnimationController.ToggleGrid(false));
 			_isGridVisible = false;
+		}
+
+		private void HighlightCellClosestToMouse()
+		{
+			if (!_isGridVisible)
+			{
+				return;
+			}
+
+			// Cast a ray from the mouse position
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _environmentLayerMask))
+			{
+				Vector3 hitPoint = hit.point;
+
+				// Find the closest grid cell to the hit point
+				GridCell closestCell = null;
+				float closestDistance = float.MaxValue;
+
+				foreach (var cell in _gridCells)
+				{
+					if (cell == null) continue;
+
+					float distance = Vector3.Distance(hitPoint, cell.Position);
+					if (distance < closestDistance)
+					{
+						closestDistance = distance;
+						closestCell = cell;
+					}
+				}
+
+				// Highlight the closest cell
+				if (closestCell != null && closestCell != _lastHighlightedCell)
+				{
+					// Reset the last highlighted cell
+					if (_lastHighlightedCell != null)
+					{
+						_lastHighlightedCell.SetGridCellState(GridCellState.Default);
+					}
+
+					// Highlight the new cell
+					closestCell.SetGridCellState(GridCellState.Highlighted);
+					_lastHighlightedCell = closestCell;
+				}
+			}
 		}
 	}
 }
