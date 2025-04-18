@@ -1,19 +1,25 @@
+using Meowdieval.Core.GridSystem;
 using UnityEngine;
 
-namespace Meowdieval
+namespace Meowdieval.Core.Building
 {
-    public class Placeable : MonoBehaviour
-    {
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        
-        }
+	public class Placeable : MonoBehaviour
+	{
+		private GridCell _currentCell;
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-    }
+		public void Initialize(GridCell cell)
+		{
+			_currentCell = cell;
+			transform.position = cell.Position;
+		}
+
+		public void RemoveFromGrid()
+		{
+			if (_currentCell != null)
+			{
+				_currentCell.SetGridCellState(GridCellState.Default);
+				_currentCell = null;
+			}
+		}
+	}
 }

@@ -1,0 +1,15 @@
+# Exported from Nomad Sculpt
+
+newmtl Tree03
+ map_Kd LowPoly_color_3.png
+ map_roughness LowPoly_roughness_3.png
+ map_Pr LowPoly_roughness_3.png
+ map_metallic LowPoly_metalness_3.png
+ map_Pm LowPoly_metalness_3.png
+ map_tangentSpaceNormal LowPoly_normal_2.png
+ map_bump LowPoly_normal_2.png
+ norm LowPoly_normal_2.png
+ bump LowPoly_normal_2.png
+ Kd 1.000000 1.000000 1.000000
+ Pr 0.250000
+ Pm 0.000000

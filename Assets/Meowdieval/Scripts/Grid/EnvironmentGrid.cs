@@ -1,10 +1,16 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Meowdieval.Core.GridSystem
 {
+	/// <summary>
+	/// Manages the environment grid, including grid cell creation, visibility, and highlighting.
+	/// </summary>
 	public class EnvironmentGrid : MonoBehaviour
 	{
+		#region Serialized Fields
+
 		[Header("Grid Settings")]
 		[SerializeField] private GameObject _environment;
 		[SerializeField] private LayerMask _environmentLayerMask;
@@ -20,6 +26,10 @@ namespace Meowdieval.Core.GridSystem
 		[Header("Highlight Settings")]
 		[SerializeField] private float _highlightInterval = 1f; // Interval in seconds
 
+		#endregion
+
+		#region Private Fields
+
 		private Renderer _environmentRenderer;
 		private Terrain _environmentTerrain;
 		private GameObject _cellsParent;
@@ -31,9 +41,29 @@ namespace Meowdieval.Core.GridSystem
 		private GridCell _lastHighlightedCell;
 		private float _nextHighlightTime;
 
+		#endregion
+
+		#region Public Properties
+
+		/// <summary>
+		/// Gets the 2D array of grid cells.
+		/// </summary>
 		public GridCell[,] GridCells => _gridCells;
+
+		/// <summary>
+		/// Gets whether the grid is currently visible.
+		/// </summary>
 		public bool IsGridVisible => _isGridVisible;
 
+		public GridCell LastHighlightedCell => _lastHighlightedCell;
+
+		#endregion
+
+		#region Unity Methods
+
+		/// <summary>
+		/// Initializes the environment grid and creates grid cells.
+		/// </summary>
 		private void Start()
 		{
 			_environmentRenderer ??= _environment.GetComponent<Renderer>();
@@ -44,30 +74,97 @@ namespace Meowdieval.Core.GridSystem
 			_gridAnimationController = new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
 		}
 
+		/// <summary>
+		/// Updates the grid, including highlighting the closest cell to the mouse.
+		/// </summary>
 		private void Update()
 		{
 			// Check if it's time to highlight the closest cell
-			if (Time.deltaTime >= _nextHighlightTime)
+			if (Time.time >= _nextHighlightTime)
 			{
 				HighlightCellClosestToMouse();
-				_nextHighlightTime = Time.deltaTime + _highlightInterval; // Schedule the next highlight
+				_nextHighlightTime = Time.time + _highlightInterval; // Schedule the next highlight
 			}
 		}
 
-		private Bounds GetEnvironmentBounds()
+		#endregion
+
+		#region Public Methods
+
+		/// <summary>
+		/// Shows the grid by toggling the visibility of all grid cells.
+		/// </summary>
+		public void ShowGrid()
 		{
-			if (_environmentRenderer != null)
+			if (_isGridVisible)
 			{
-				return _environmentRenderer.bounds;
-			}
-			else if (_environmentTerrain != null)
-			{
-				return new Bounds(_environmentTerrain.transform.position + _environmentTerrain.terrainData.size / 2, _environmentTerrain.terrainData.size);
+				return;
 			}
 
-			return new Bounds();
+			_gridAnimationController ??= new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
+
+			StartCoroutine(_gridAnimationController.ToggleGrid(true));
+			_isGridVisible = true;
 		}
 
+		/// <summary>
+		/// Hides the grid by toggling the visibility of all grid cells.
+		/// </summary>
+		public void HideGrid()
+		{
+			if (!_isGridVisible)
+			{
+				return;
+			}
+
+			_gridAnimationController ??= new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
+
+			StartCoroutine(_gridAnimationController.ToggleGrid(false));
+			_isGridVisible = false;
+		}
+
+		public GridCell GetClosestCell(Vector3 position)
+		{
+			if (_gridCells == null || _gridCells.Length == 0)
+			{
+				Debug.LogWarning("Grid cells are not initialized.");
+				return null;
+			}
+
+			int closestRow = Mathf.RoundToInt((position.x - _offset.x) / _cellSize) % _gridCells.GetLength(0);
+			int closestCol = Mathf.RoundToInt((position.z - _offset.z) / _cellSize) % _gridCells.GetLength(1);
+
+			// Ensure indices are within bounds
+			closestRow = (closestRow + _gridCells.GetLength(0)) % _gridCells.GetLength(0);
+			closestCol = (closestCol + _gridCells.GetLength(1)) % _gridCells.GetLength(1);
+
+			GridCell closestCell = _gridCells[closestRow, closestCol];
+			return closestCell;
+		}
+
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Gets the position on the environment from a given sky position by casting a ray downward.
+		/// </summary>
+		/// <param name="skyPosition">The position in the sky to cast the ray from.</param>
+		/// <returns>The position on the environment, or Vector3.zero if no hit is found.</returns>
+		private Vector3 GetPositionFromSky(Vector3 skyPosition)
+		{
+			Ray ray = new Ray(skyPosition, Vector3.down);
+			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _environmentLayerMask))
+			{
+				return hit.point;
+			}
+			return Vector3.zero;
+		}
+
+		/// <summary>
+		/// Creates the grid cells based on the environment bounds.
+		/// </summary>
 		private void CreateGridCells()
 		{
 			Bounds bounds = GetEnvironmentBounds();
@@ -106,42 +203,9 @@ namespace Meowdieval.Core.GridSystem
 			}
 		}
 
-		public Vector3 GetPositionFromSky(Vector3 skyPosition)
-		{
-			Ray ray = new Ray(skyPosition, Vector3.down);
-			if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, _environmentLayerMask))
-			{
-				return hit.point;
-			}
-			return Vector3.zero;
-		}
-
-		public void ShowGrid()
-		{
-			if (_isGridVisible)
-			{
-				return;
-			}
-
-			_gridAnimationController ??= new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
-
-			StartCoroutine(_gridAnimationController.ToggleGrid(true));
-			_isGridVisible = true;
-		}
-
-		public void HideGrid()
-		{
-			if (!_isGridVisible)
-			{
-				return;
-			}
-
-			_gridAnimationController ??= new GridCellAnimationController(_gridCells, _cellDelayAnimation, _environmentLayerMask);
-
-			StartCoroutine(_gridAnimationController.ToggleGrid(false));
-			_isGridVisible = false;
-		}
-
+		/// <summary>
+		/// Highlights the grid cell closest to the mouse position.
+		/// </summary>
 		private void HighlightCellClosestToMouse()
 		{
 			if (!_isGridVisible)
@@ -155,36 +219,47 @@ namespace Meowdieval.Core.GridSystem
 			{
 				Vector3 hitPoint = hit.point;
 
-				// Find the closest grid cell to the hit point
-				GridCell closestCell = null;
-				float closestDistance = float.MaxValue;
-
-				foreach (var cell in _gridCells)
-				{
-					if (cell == null) continue;
-
-					float distance = Vector3.Distance(hitPoint, cell.Position);
-					if (distance < closestDistance)
-					{
-						closestDistance = distance;
-						closestCell = cell;
-					}
-				}
+				GridCell closestCell = GetClosestCell(hitPoint);
 
 				// Highlight the closest cell
-				if (closestCell != null && closestCell != _lastHighlightedCell)
+				if (closestCell != null)
 				{
 					// Reset the last highlighted cell
-					if (_lastHighlightedCell != null)
-					{
-						_lastHighlightedCell.SetGridCellState(GridCellState.Default);
-					}
+					_lastHighlightedCell?.SetGridCellState(GridCellState.Default);
 
 					// Highlight the new cell
 					closestCell.SetGridCellState(GridCellState.Highlighted);
 					_lastHighlightedCell = closestCell;
 				}
+				else
+				{
+					Debug.LogWarning("Closest cell is null or already highlighted.");
+				}
+			}
+			else
+			{
+				Debug.LogWarning("Raycast did not hit any object.");
 			}
 		}
+
+		/// <summary>
+		/// Gets the bounds of the environment based on its renderer or terrain.
+		/// </summary>
+		/// <returns>The bounds of the environment.</returns>
+		private Bounds GetEnvironmentBounds()
+		{
+			if (_environmentRenderer != null)
+			{
+				return _environmentRenderer.bounds;
+			}
+			else if (_environmentTerrain != null)
+			{
+				return new Bounds(_environmentTerrain.transform.position + _environmentTerrain.terrainData.size / 2, _environmentTerrain.terrainData.size);
+			}
+
+			return new Bounds();
+		}
+
+		#endregion
 	}
 }
